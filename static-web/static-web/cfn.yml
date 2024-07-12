@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: |
+  This CloudFormation Template was written for running Kittens Carousel Static Website on EC2. 
+  Kittens Carousel Static Website will be deployed on Amazon Linux 2023 EC2 Instance with custom 
+  security group which allows http connections on port 80 and ssh port 22 from anywhere. Kittens Carousel Static Website
+  is downloaded from my Public Github repository, then deployed on Apache Web Server.
+
+Parameters:
+  
+Resources:
+  KittenInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0b72821e2f351e396 
+      InstanceType: t2.micro
+      KeyName: firstkeypair 
+      
+      SecurityGroups: 
+        - !Ref ProsjktSec 
+      Tags:
+        - Key: Name
+          Value: Prosjeckt-kittens
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          sudo yum update -y
+          sudo yum install -y httpd
+          sudo systemctl start httpd
+          sudo systemctl enable httpd
+          cd /tmp/
+          wget https://github.com/Demirkol14/KittenProject/archive/refs/heads/main.zip
+          unzip main.zip
+          cd KittenProject-main/101-kittens-carousel-static-website-ec2/static-web
+          sudo mv * /var/www/html/
+          cd /tmp/
+          rm -rf KittenProject-main main.zip
+          sudo systemctl restart httpd
+  
+  myWebServer:
+    
+
+  mySecGrp:
+    
+
+Outputs:
+  webSiteURL:
+    Description: URL of website
+    Value: !Sub
+      - 
+      - 
+   
